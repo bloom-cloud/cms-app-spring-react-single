@@ -10,7 +10,7 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await API.post("/auth/login", { username, password });
+      const res = await API.post("/auth/signin", { username, password });
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {

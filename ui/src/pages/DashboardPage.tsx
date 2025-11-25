@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
 
-const Dashboard: React.FC = () => {
+const DashboardPage: React.FC = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -26,4 +26,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardPage;
