@@ -24,35 +24,48 @@ public class SecurityConfiguration {
 
     private final JwtRequestFilter jwtRequestFilter;
 
+    // ---------------- Password Encoder ----------------
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // Expose AuthenticationManager
+    // ---------------- AuthenticationManager ----------------
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
+    // ---------------- Security Filter Chain ----------------
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
+                // Disable CSRF for APIs
                 .csrf(csrf -> csrf.disable())
+
+                // Enable stateless sessions (JWT only)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Public endpoints (login/register)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // signup/login public
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .anyRequest().authenticated() // all other endpoints require authentication
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT only
-                )
+
+                // Exception handling for unauthorized requests
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
                         )
+                )
+
+                // Enable Google OAuth2 login
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/api/auth/login") // optional: your custom login endpoint
                 );
 
-        // Register JWT filter
+        // Register your custom JWT filter before Spring Security's authentication filter
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
