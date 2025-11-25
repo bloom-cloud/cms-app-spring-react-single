@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -53,7 +55,8 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         if (user == null) {
             user = User.builder()
                     .email(email)
-                    .username(email)               // default to email
+                    .username(email)
+                    .password(UUID.randomUUID().toString())
                     .firstName(extractFirst(name))
                     .lastName(extractLast(name))
                     .providerId(providerId)

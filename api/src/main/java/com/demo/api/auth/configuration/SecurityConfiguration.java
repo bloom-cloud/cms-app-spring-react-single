@@ -28,6 +28,8 @@ import java.util.List;
 public class SecurityConfiguration {
 
     private final JwtRequestFilter jwtRequestFilter;
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
+
 
     // ---------------- Password Encoder ----------------
     @Bean
@@ -79,7 +81,7 @@ public class SecurityConfiguration {
                 )
                 // OAuth2 login (optional)
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/api/auth/login")
+                        .successHandler(customOAuth2SuccessHandler)
                 );
 
         // JWT filter

@@ -52,4 +52,15 @@ public class TestController {
         User currentUser = authService.getCurrentUser();
         return ResponseEntity.ok("Hello " + currentUser.getUsername() + ", your role: " + currentUser.getRole());
     }
+
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        User currentUser = authService.getCurrentUser();
+        if (currentUser == null) {
+            return ResponseEntity.badRequest().body("No authenticated user found");
+        }
+
+        return ResponseEntity.ok(currentUser);
+    }
 }

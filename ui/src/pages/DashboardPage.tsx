@@ -5,15 +5,15 @@ const DashboardPage: React.FC = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    API.get("/user") // protected endpoint
-      .then((res) => setMessage(res.data.message))
+    API.get("/me") // protected endpoint
+      .then((res) => setMessage(res.data.username))
       .catch((err) => setMessage("Error fetching dashboard data" + err));
   }, []);
 
   return (
     <div>
       <h1>Dashboard</h1>
-      <p>{message}</p>
+      <p>Hello {message}</p>
       <button
         onClick={() => {
           localStorage.removeItem("token");

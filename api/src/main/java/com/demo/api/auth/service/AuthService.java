@@ -10,7 +10,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,12 +54,13 @@ public class AuthService {
     }
 
     public Authentication authenticateUser(String username, String password) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = userRepository.findByEmail(username).orElse(userRepository.findByUsername(username).orElse(null));
-
         if (user != null) {
             user.setLastLogin(LocalDateTime.now());
             userRepository.save(user);
@@ -67,14 +70,33 @@ public class AuthService {
         return authentication;
     }
 
-    public User getCurrentUser(){
+    /**
+     * Get current authenticated user, supports both JWT login and OAuth2 login
+     */
+    public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
 
-        String username = authentication.getName();
-        return userRepository.findByEmail(username).orElse(userRepository.findByUsername(username).orElse(null));
+        Object principal = authentication.getPrincipal();
+
+        // Classic JWT or username/password login (UserDetails or your User entity)
+        if (principal instanceof User user) {
+            return user;
+        }
+        if (principal instanceof UserDetails userDetails) {
+            return userRepository.findByUsername(userDetails.getUsername())
+                    .orElse(userRepository.findByEmail(userDetails.getUsername()).orElse(null));
+        }
+
+        // OAuth2 login
+        if (principal instanceof OAuth2User oAuthUser) {
+            String email = (String) oAuthUser.getAttributes().get("email");
+            return userRepository.findByEmail(email).orElse(null);
+        }
+
+        return null;
     }
 
     public boolean existsByEmail(String email) {

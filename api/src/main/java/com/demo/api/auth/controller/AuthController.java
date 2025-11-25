@@ -10,6 +10,7 @@ import com.demo.api.auth.util.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,14 +62,5 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser() {
-        User currentUser = authService.getCurrentUser();
-        if (currentUser == null) {
-            return ResponseEntity.badRequest().body("No authenticated user found");
-        }
-
-        return ResponseEntity.ok(currentUser);
-    }
 
 }

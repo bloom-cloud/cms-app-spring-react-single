@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import PublicPage from "./pages/PublicPage";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import DashboardPage from "./pages/DashboardPage";
+import OAuthSuccess from "./pages/OAuthSuccess";
 
 const App: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<PublicPage />} />
         <Route path="/login" element={<LoginPage />} />
+         <Route path="/oauth-success" element={<OAuthSuccess />} />
         <Route
           path="/dashboard"
           element={

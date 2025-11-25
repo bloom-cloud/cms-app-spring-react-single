@@ -18,9 +18,10 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleOAuth0Login = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/auth0";
-  };
+const handleOAuth0Login = () => {
+  window.location.href = "http://localhost:8080/oauth2/authorization/google";
+};
+
 
   return (
     <div>
