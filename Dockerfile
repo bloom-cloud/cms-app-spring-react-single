@@ -17,6 +17,7 @@ COPY ui/ ./
 # Build React app
 # Make sure VITE_API_URL is available for your React app
 ARG BACKEND_URL=http://localhost:8080
+ARG FRONTEND_URL=http://localhost:8080
 ENV VITE_API_URL=${BACKEND_URL}/api
 
 RUN npm run build
@@ -48,6 +49,9 @@ RUN ./mvnw clean package -DskipTests
 # -----------------------------
 FROM eclipse-temurin:17-jdk AS runtime
 
+ARG FRONTEND_URL
+ARG BACKEND_URL
+
 WORKDIR /app
 
 # Copy backend JAR
@@ -61,6 +65,8 @@ EXPOSE 8080
 
 # Set Spring profile for Docker
 ENV SPRING_PROFILES_ACTIVE=docker
+ENV FRONTEND_URL=${FRONTEND_URL}
+ENV BACKEND_URL=${BACKEND_URL}
 
 # Healthcheck (optional)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
