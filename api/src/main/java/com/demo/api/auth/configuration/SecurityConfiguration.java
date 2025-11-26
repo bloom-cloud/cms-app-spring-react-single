@@ -79,7 +79,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/", "/index.html").permitAll()
                         .requestMatchers("/static/**", "/assets/**").permitAll()
                         .requestMatchers("/**/*.js", "/**/*.css", "/**/*.png", "/**/*.jpg", "/**/*.svg", "/**/*.ico").permitAll()
-                        .requestMatchers("/{path:[^\\.]}").permitAll()  // Allow SPA routes (no dots = not files)
+                        .requestMatchers("/{path:[^\\.]*}").permitAll()  // Allow SPA routes (no dots = not files)
                         .anyRequest().authenticated()
                 )
                 // Unauthorized requests handling

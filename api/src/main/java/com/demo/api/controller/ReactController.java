@@ -6,9 +6,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ReactController {
 
+    @GetMapping("/")
+    public String index() {
+        return "forward:/index.html";
+    }
+
     // Serve React app for all non-API routes
     // This allows React Router to handle client-side routing
-    @GetMapping("/{path:[^\\.]}")
+    @GetMapping("/{path:[^\\.]*}")
     public String serveReactApp() {
         return "forward:/index.html";
     }
