@@ -20,11 +20,14 @@ import java.util.function.Function;
 @Slf4j
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;  // Must be at least 256-bit for HS256
+    private final String jwtSecret;
+    private final long jwtExpiration;
 
-    @Value("${jwt.expiration}")
-    private long jwtExpiration; // in milliseconds
+    public JwtUtil(@Value("${jwt.secret}") String jwtSecret,
+                   @Value("${jwt.expiration}") long jwtExpiration) {
+        this.jwtSecret = jwtSecret;
+        this.jwtExpiration = jwtExpiration;
+    }
 
     private SecretKey getSigningKey() {
         // Ensure key is 256-bit (32 bytes)
