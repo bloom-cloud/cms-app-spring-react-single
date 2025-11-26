@@ -76,9 +76,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/").permitAll()
                         .requestMatchers("/api/public", "/api/debug").permitAll()
-                        .requestMatchers("/", "/index.html", "/static/", "/assets/", "/favicon.ico").permitAll()
-                        .requestMatchers("//.js", "/**/.css", "//*.png", "//.jpg", "/**/.svg", "//*.ico").permitAll()
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/", "/index.html").permitAll()
+                        .requestMatchers("/static/", "/assets/").permitAll()
+                        .requestMatchers("//.js", "/**/.css", "//*.png", "//.jpg", "/**/.svg", "/*/.ico").permitAll()
+                        .requestMatchers("/{path:[^\\.]}").permitAll()  // Allow SPA routes (no dots = not files)
+                        .anyRequest().authenticated()
                 )
                 // Unauthorized requests handling
                 .exceptionHandling(ex -> ex
