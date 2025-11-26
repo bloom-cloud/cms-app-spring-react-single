@@ -13,7 +13,7 @@ const DashboardPage: React.FC = () => {
   return (
     <div>
       <h1>Dashboard</h1>
-      <p>Hello {message}</p>
+      <p>Response: {message}</p>
       <button
         onClick={() => {
           localStorage.removeItem("token");
