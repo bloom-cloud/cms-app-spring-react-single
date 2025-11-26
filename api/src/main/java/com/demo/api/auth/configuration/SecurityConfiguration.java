@@ -74,11 +74,11 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Public endpoints
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public", "/api/debug").permitAll()
                         .requestMatchers("/", "/index.html").permitAll()
-                        .requestMatchers("/static/", "/assets/").permitAll()
-                        .requestMatchers("//.js", "/**/.css", "//*.png", "//.jpg", "/**/.svg", "/*/.ico").permitAll()
+                        .requestMatchers("/static/**", "/assets/**").permitAll()
+                        .requestMatchers("/**/*.js", "/**/*.css", "/**/*.png", "/**/*.jpg", "/**/*.svg", "/**/*.ico").permitAll()
                         .requestMatchers("/{path:[^\\.]}").permitAll()  // Allow SPA routes (no dots = not files)
                         .anyRequest().authenticated()
                 )
