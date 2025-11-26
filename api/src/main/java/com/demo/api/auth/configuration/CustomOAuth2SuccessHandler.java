@@ -7,8 +7,8 @@ import com.demo.api.auth.repo.UserRepository;
 import com.demo.api.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Component
 @RequiredArgsConstructor
@@ -29,8 +28,8 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    // Redirect to Vite localhost
-    private static final String FRONTEND_REDIRECT = "http://localhost:5173/oauth-success?token=";
+    @Value("${app.frontend-url:http://localhost:5173}")
+    private String frontendUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -87,7 +86,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         String jwt = jwtUtil.generateTokenFromUsername(user.getUsername());
 
         // Redirect to Vite frontend with token
-        response.sendRedirect(FRONTEND_REDIRECT + jwt);
+        response.sendRedirect(frontendUrl + jwt);
     }
 
     private String extractFirst(String name) {
