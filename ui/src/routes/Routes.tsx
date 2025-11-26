@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PublicPage from "../pages/PublicPage";
 import LoginPage from "../pages/LoginPage";
-import Dashboard from "../pages/Dashboard";
+import DashboardPage from "../pages/DashboardPage";
 
 const AppRoutes: React.FC = () => {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -13,7 +13,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route
           path="/dashboard"
-          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+          element={isAuthenticated ? <DashboardPage /> : <Navigate to="/login" />}
         />
       </Routes>
     </BrowserRouter>
