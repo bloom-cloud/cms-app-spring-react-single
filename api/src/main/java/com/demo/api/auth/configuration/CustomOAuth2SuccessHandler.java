@@ -86,7 +86,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         String jwt = jwtUtil.generateTokenFromUsername(user.getUsername());
 
         // Redirect to Vite frontend with token
-        response.sendRedirect(frontendUrl + jwt);
+        response.sendRedirect(frontendUrl + "/oauth-success?token=" + jwt);
     }
 
     private String extractFirst(String name) {
