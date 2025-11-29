@@ -3,14 +3,10 @@ version: "3.9"
 services:
   backend:
     build:
-      context: ./   # path to your Dockerfile
+      context: ./   
       dockerfile: Dockerfile
     env_file:
       - ./api/src/main/resources/.env
     container_name: cms
     ports:
       - "80:80"
-    environment:
-      FRONTEND_URL: "http://localhost:80"
-      GOOGLE_CLIENT_ID: "your-google-client-id"
-      GOOGLE_CLIENT_SECRET: "your-google-client-secret"
