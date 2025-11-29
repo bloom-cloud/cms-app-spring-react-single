@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import OAuthSuccess from "./pages/OAuthSuccess";
 import RegisterPage from "./pages/RegisterPage";
 import { AppNavbar } from "./components/AppNavbar";
+import { AuthProvider } from "./context/AuthContext";
 
 const App: React.FC = () => {
   return (
@@ -30,9 +31,12 @@ const App: React.FC = () => {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoutes>
-                  <DashboardPage />
-                </ProtectedRoutes>
+                
+                  <ProtectedRoutes>
+                    <DashboardPage />
+                  </ProtectedRoutes>
+
+                
               }
             />
           </Routes>
@@ -48,6 +52,7 @@ const App: React.FC = () => {
 
       </div>
     </BrowserRouter>
+
   );
 };
 

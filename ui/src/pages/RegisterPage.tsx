@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { useAuth } from "../context/AuthContext";
 
 type RegisterDTO = {
   username: string;
@@ -13,6 +14,7 @@ type RegisterDTO = {
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth(); 
 
   const {
     register,
@@ -20,14 +22,20 @@ const RegisterPage: React.FC = () => {
     formState: { errors },
   } = useForm<RegisterDTO>();
 
+  const handleOAuthGoogle = () => {
+    window.location.href = "/oauth2/authorization/google";
+  };
+
   const onSubmit: SubmitHandler<RegisterDTO> = async (data) => {
     try {
       const res = await API.post("/auth/signup", data);
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
+
+      login(res.data.token);
+
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       console.error(err);
-      alert("Register failed: " + err);
+      alert("Register failed");
     }
   };
 
@@ -45,45 +53,59 @@ const RegisterPage: React.FC = () => {
             placeholder="Username"
             className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {errors.username && <span className="text-red-500 text-sm">Username is required</span>}
+          {errors.username && (
+            <span className="text-red-500 text-sm">Username is required</span>
+          )}
         </div>
 
         <div className="flex flex-col">
-        <input
-          type="password"
-          {...register("password", { required: true })}
-          placeholder="Password"
-          className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        {errors.password && <span className="text-red-500 text-sm">Password is required</span>}
+          <input
+            type="password"
+            {...register("password", { required: true, minLength: 6 })}
+            placeholder="Password"
+            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.password && (
+            <span className="text-red-500 text-sm">
+              Password must be at least 6 chars
+            </span>
+          )}
         </div>
 
- <div className="flex flex-col">
-        <input
-          type="email"
-          {...register("email", { required: true })}
-          placeholder="Email"
-          className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        {errors.email && <span className="text-red-500 text-sm">Email is required</span>}
+        <div className="flex flex-col">
+          <input
+            type="email"
+            {...register("email", { required: true })}
+            placeholder="Email"
+            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.email && (
+            <span className="text-red-500 text-sm">Email is required</span>
+          )}
         </div>
 
- <div className="flex flex-col">
-        <input
-          {...register("firstName", { required: true })}
-          placeholder="First Name"
-          className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        {errors.firstName && <span className="text-red-500 text-sm">First name is required</span>}
+        <div className="flex flex-col">
+          <input
+            {...register("firstName", { required: true })}
+            placeholder="First Name"
+            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.firstName && (
+            <span className="text-red-500 text-sm">
+              First name is required
+            </span>
+          )}
         </div>
 
- <div className="flex flex-col">
-        <input
-          {...register("lastName", { required: true })}
-          placeholder="Last Name"
-          className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        {errors.lastName && <span className="text-red-500 text-sm">Last name is required</span>}
+        <div className="flex flex-col">
+          <input
+            {...register("lastName", { required: true })}
+            placeholder="Last Name"
+            className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.lastName && (
+            <span className="text-red-500 text-sm">Last name is required</span>
+          )}
         </div>
 
         <button
@@ -93,6 +115,15 @@ const RegisterPage: React.FC = () => {
           Register
         </button>
       </form>
+
+      <div className="mt-6 border-t pt-4 text-center">
+        <button
+          onClick={handleOAuthGoogle}
+          className="bg-red-600 text-white w-full py-2 px-4 rounded-md"
+        >
+          Register with Google
+        </button>
+      </div>
     </div>
   );
 };

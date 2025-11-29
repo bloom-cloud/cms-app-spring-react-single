@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom";
 
 const PublicPage: React.FC = () => {
   const [message, setMessage] = useState("");
