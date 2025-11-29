@@ -7,7 +7,6 @@ import DashboardPage from "./pages/DashboardPage";
 import OAuthSuccess from "./pages/OAuthSuccess";
 import RegisterPage from "./pages/RegisterPage";
 import { AppNavbar } from "./components/AppNavbar";
-import { AuthProvider } from "./context/AuthContext";
 
 const App: React.FC = () => {
   return (
