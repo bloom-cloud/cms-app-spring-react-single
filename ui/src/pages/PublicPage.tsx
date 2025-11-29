@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
+import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom";
 
 const PublicPage: React.FC = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    API.get("/public") // your public endpoint
+    API.get("/public/test")
       .then((res) => setMessage(res.data))
       .catch((err) => setMessage("Error fetching public data" + err));
   }, []);
 
   return (
-    <div>
-      <h1>Public Pages</h1>
+    <div className="flex flex-col m-auto">
+      <h1 className="text-xl mb-2">Homepage</h1>
       <p>{message}</p>
-      <a href="/login">Login</a>
+
     </div>
   );
 };

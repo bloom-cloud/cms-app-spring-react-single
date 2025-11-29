@@ -16,9 +16,9 @@ public class TestController {
     private final AuthService authService;
 
     // Public - no auth required
-    @GetMapping("/public")
+    @GetMapping("/public/test")
     public ResponseEntity<String> publicEndpoint() {
-        return ResponseEntity.ok("This is a public endpoint. No authentication required.");
+        return ResponseEntity.ok("This data is fetched from backend.");
     }
 
     // USER OR ADMIN

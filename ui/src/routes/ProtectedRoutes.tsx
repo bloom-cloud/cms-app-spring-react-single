@@ -14,6 +14,7 @@ const ProtectedRoutes: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   // Logged in, render the children
+  
   return children;
 };
 

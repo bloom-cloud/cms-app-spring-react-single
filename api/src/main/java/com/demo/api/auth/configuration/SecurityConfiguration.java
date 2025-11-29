@@ -75,7 +75,7 @@ public class SecurityConfiguration {
                 // Public endpoints
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/public", "/api/debug").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/", "/index.html").permitAll()
                         .requestMatchers("/static/**", "/assets/**").permitAll()
                         .requestMatchers("/**/*.js", "/**/*.css", "/**/*.png", "/**/*.jpg", "/**/*.svg", "/**/*.ico").permitAll()

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
+import { Button } from "@/components/ui/button"
 
 const DashboardPage: React.FC = () => {
   const [message, setMessage] = useState("");
@@ -14,14 +15,13 @@ const DashboardPage: React.FC = () => {
     <div>
       <h1>Dashboard</h1>
       <p>Response: {message}</p>
-      <button
-        onClick={() => {
+          <div onClick={() => {
           localStorage.removeItem("token");
           window.location.href = "/";
-        }}
-      >
-        Logout
-      </button>
+        }} className="flex min-h-svh flex-col items-center justify-center">
+      <Button>Logout</Button>
+    </div>
+      
     </div>
   );
 };

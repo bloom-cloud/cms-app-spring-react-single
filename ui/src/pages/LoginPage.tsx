@@ -1,49 +1,80 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
+import { useForm, type SubmitHandler } from "react-hook-form";
+
+type LoginDTO = {
+  username: string;
+  password: string;
+};
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginDTO>();
+
+  const onSubmit: SubmitHandler<LoginDTO> = async (data) => {
     try {
-      const res = await API.post("/auth/signin", { username, password });
+      const res = await API.post("/auth/signin", data);
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      alert("Login failed");
+      console.error(err);
+      alert("Login failed: " + err);
     }
   };
 
-const handleOAuth0Login = () => {
-  window.location.href = "http://localhost:8080/oauth2/authorization/google";
-};
-
+  const handleOAuth0Login = () => {
+    // Redirect to OAuth endpoint
+    window.location.href = "/oauth2/authorization/google";
+  };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold">Login</h1>
+        <p className="text-gray-600">Login to your account</p>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <div className="flex flex-col">
         <input
           type="text"
           placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          {...register("username", { required: true })}
+          className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        {errors.username && <span className="text-red-500 text-sm">Username is required</span>}
+</div>
+
+      <div className="flex flex-col">
         <input
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          {...register("password", { required: true })}
+          className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button type="submit">Login</button>
+        {errors.password && <span className="text-red-500 text-sm">Password is required</span>}
+</div>
+        <button
+          type="submit"
+          className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+        >
+          Login
+        </button>
       </form>
 
-      <hr />
-      <button onClick={handleOAuth0Login}>Login with Auth0</button>
+      <div className="my-4 border-t pt-4 text-center">
+        <button
+          onClick={handleOAuth0Login}
+          className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition w-full"
+        >
+          Login with Google
+        </button>
+      </div>
     </div>
   );
 };
